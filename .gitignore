@@ -1,0 +1,13 @@
+node_modules
+dist
+.env
+.env.local
+coverage
+target
+contracts/target
+.DS_Store
+.vercel
+.idea
+.vscode
+*.tsbuildinfo
+**/test_snapshots
