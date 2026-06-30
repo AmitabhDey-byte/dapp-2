@@ -12,7 +12,8 @@ The project is designed as a full-stack Web3 submission: not just a contract dem
 - GitHub repository: [AmitabhDey-byte/dapp-2](https://github.com/AmitabhDey-byte/dapp-2)
 - GitHub Pages: [https://amitabhdey-byte.github.io/dapp-2/](https://amitabhdey-byte.github.io/dapp-2/)
 - Submission evidence: [`docs/submission-evidence.md`](docs/submission-evidence.md)
-- Vercel deployment: add your Vercel URL here after final redeploy
+- Vercel deployment: [https://dapp-2-pearl.vercel.app/](https://dapp-2-pearl.vercel.app/)
+- Demo video: [Google Drive walkthrough](https://drive.google.com/file/d/1pJuuivnpNuMHSTpO_oAM7yRZZfNzAVt8/view?usp=sharing)
 
 ## Preview
 
@@ -41,6 +42,10 @@ The project is designed as a full-stack Web3 submission: not just a contract dem
 ### CI/CD Evidence
 
 ![GitHub Actions](docs/screenshots/github-actions.png)
+
+### Contract Explorer Evidence
+
+![Stellar Lab contract explorer](docs/screenshots/stellar-lab-contract.png)
 
 ## What Nebula Pool Does
 
@@ -261,3 +266,5 @@ The Vite base path defaults to `/` for Vercel. GitHub Pages uses `VITE_BASE_PATH
 Use this short pitch for a 1-2 minute walkthrough:
 
 > Nebula Pool is a Stellar testnet liquidity dashboard. A user connects Freighter, deposits into a Soroban pool, and the pool calls a separate strategy oracle contract to calculate reward bonuses and risk scores. The frontend reads live contract state and recent events from Stellar RPC. The app also includes responsive analytics pages, deployment evidence, tests, CI/CD, and an optional Gemini strategy copilot powered by a secure serverless route.
+
+

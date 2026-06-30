@@ -1,4 +1,4 @@
-# Submission Evidence
+﻿# Submission Evidence
 
 Use this page as the final review checklist before submitting Nebula Pool.
 
@@ -11,11 +11,13 @@ Use this page as the final review checklist before submitting Nebula Pool.
 
 ## Live Demo
 
-- Demo URL: <https://amitabhdey-byte.github.io/dapp-2/>
+- Demo URL: <https://dapp-2-pearl.vercel.app/>
+- GitHub Pages URL: <https://amitabhdey-byte.github.io/dapp-2/>
 - Desktop screenshots: `docs/screenshots/desktop-hero.png`, `docs/screenshots/manage-position.png`, `docs/screenshots/overview.png`
 - Mobile screenshots: `docs/screenshots/mobile-hero.png`, `docs/screenshots/mobile-overview.png`
 - CI/CD screenshot: `docs/screenshots/github-actions.png`
-- Demo video: `TBD_VIDEO_LINK`
+- Contract explorer screenshot: `docs/screenshots/stellar-lab-contract.png`
+- Demo video: <https://drive.google.com/file/d/1pJuuivnpNuMHSTpO_oAM7yRZZfNzAVt8/view?usp=sharing>
 - Vercel env includes `GEMINI_API_KEY` for the AI advisor route
 
 ## Contracts
@@ -58,3 +60,4 @@ Expected frontend test summary:
 - Mobile responsiveness: CSS breakpoints cover tablet and phone layouts
 - CI/CD: GitHub Actions validates and deploys the app
 - AI advisor: `/api/gemini` provides server-side Gemini strategy summaries
+
