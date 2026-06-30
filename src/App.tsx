@@ -13,7 +13,7 @@ import {
 } from "./lib/stellar";
 import type { PoolEvent, PoolPosition, PoolStats, WalletState } from "./lib/types";
 
-type Page = "overview" | "manage" | "activity" | "guide";
+type Page = "overview" | "manage" | "activity" | "advisor" | "guide";
 
 const initialStats: PoolStats = {
   label: config.poolLabel,
@@ -39,6 +39,9 @@ export default function App() {
   const [lockDays, setLockDays] = useState("30");
   const [withdrawAmount, setWithdrawAmount] = useState("1000");
   const [projectedBonus, setProjectedBonus] = useState(0);
+  const [advisorPrompt, setAdvisorPrompt] = useState("How should I evaluate this pool position?");
+  const [advisorAnswer, setAdvisorAnswer] = useState("");
+  const [advisorBusy, setAdvisorBusy] = useState(false);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("Waiting for wallet connection");
   const [error, setError] = useState("");
@@ -52,6 +55,10 @@ export default function App() {
   const canSubmitDeposit = wallet.connected && hasContractConfig && hasValidDeposit && hasValidLockDays && !busy;
   const canSubmitWithdraw = wallet.connected && hasContractConfig && hasValidWithdraw && !busy;
   const canRefreshRewards = wallet.connected && hasContractConfig && position.deposited > 0 && !busy;
+  const poolShare = stats.total_deposits > 0 ? (position.deposited / stats.total_deposits) * 100 : 0;
+  const bonusRatio = position.deposited > 0 ? (position.pending_bonus / position.deposited) * 100 : 0;
+  const healthScore = Math.max(0, Math.min(100, 100 - position.risk_score + Math.min(20, bonusRatio)));
+  const riskLabel = position.risk_score >= 75 ? "High risk" : position.risk_score >= 45 ? "Moderate risk" : "Conservative";
   const formHint = !hasContractConfig
     ? "Deploy contracts and add their IDs before sending transactions."
     : !wallet.connected
@@ -69,6 +76,7 @@ export default function App() {
     overview: "Overview",
     manage: "Manage Pool",
     activity: "Live Activity",
+    advisor: "AI Advisor",
     guide: "How It Works"
   }[activePage];
 
@@ -204,6 +212,42 @@ export default function App() {
     }
   }
 
+  async function handleAskAdvisor() {
+    try {
+      setAdvisorBusy(true);
+      setError("");
+      const response = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: advisorPrompt,
+          context: {
+            network: config.network,
+            walletConnected: wallet.connected,
+            totalDeposits: stats.total_deposits,
+            userCount: stats.user_count,
+            position,
+            projectedBonus: projectedBonusValue,
+            poolSharePercent: poolShare,
+            bonusRatioPercent: bonusRatio,
+            riskLabel
+          }
+        })
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error ?? "AI advisor request failed");
+      }
+
+      setAdvisorAnswer(data.answer ?? "No advisor response returned.");
+    } catch (caughtError) {
+      setError(normalizeError(caughtError));
+    } finally {
+      setAdvisorBusy(false);
+    }
+  }
+
   return (
     <main className="shell">
       <nav className="topbar" aria-label="Main navigation">
@@ -212,14 +256,22 @@ export default function App() {
           <span>Nebula Pool</span>
         </a>
         <div className="nav-pills">
-          {(["overview", "manage", "activity", "guide"] as Page[]).map((page) => (
+          {(["overview", "manage", "activity", "advisor", "guide"] as Page[]).map((page) => (
             <button
               className={`nav-pill ${activePage === page ? "nav-pill--active" : ""}`}
               key={page}
               onClick={() => setActivePage(page)}
               type="button"
             >
-              {page === "overview" ? "Overview" : page === "manage" ? "Manage" : page === "activity" ? "Activity" : "Guide"}
+              {page === "overview"
+                ? "Overview"
+                : page === "manage"
+                  ? "Manage"
+                  : page === "activity"
+                    ? "Activity"
+                    : page === "advisor"
+                      ? "AI Advisor"
+                      : "Guide"}
             </button>
           ))}
         </div>
@@ -306,6 +358,21 @@ export default function App() {
                 <div><strong>1</strong><span>Frontend signs with Freighter</span></div>
                 <div><strong>2</strong><span>Pool contract stores positions</span></div>
                 <div><strong>3</strong><span>Oracle returns bonus and risk</span></div>
+              </div>
+            </article>
+
+            <article className="panel">
+              <div className="panel__header">
+                <p className="eyebrow">Strategy health</p>
+                <h2>{riskLabel}</h2>
+              </div>
+              <div className="meter" aria-label={`Strategy health ${healthScore.toFixed(0)} out of 100`}>
+                <span style={{ width: `${healthScore}%` }} />
+              </div>
+              <div className="mini-metrics">
+                <div><span>Pool share</span><strong>{poolShare.toFixed(2)}%</strong></div>
+                <div><span>Bonus ratio</span><strong>{bonusRatio.toFixed(2)}%</strong></div>
+                <div><span>Health score</span><strong>{healthScore.toFixed(0)}/100</strong></div>
               </div>
             </article>
           </section>
@@ -429,6 +496,57 @@ export default function App() {
                 <div><span>Pool</span><strong>{truncateAddress(config.poolContractId)}</strong></div>
                 <div><span>Oracle</span><strong>{truncateAddress(config.oracleContractId)}</strong></div>
                 <div><span>RPC</span><strong>{config.rpcUrl.replace("https://", "")}</strong></div>
+              </div>
+            </article>
+          </section>
+        ) : null}
+
+        {activePage === "advisor" ? (
+          <section className="page-grid page-grid--guide">
+            <article className="panel panel--wide">
+              <div className="panel__header">
+                <p className="eyebrow">Gemini strategy copilot</p>
+                <h2>Ask for a plain-English pool analysis</h2>
+              </div>
+              <label className="field">
+                <span>Question</span>
+                <textarea value={advisorPrompt} onChange={(event) => setAdvisorPrompt(event.target.value)} rows={5} />
+              </label>
+              <div className="button-row">
+                <button className="button button--primary" onClick={handleAskAdvisor} disabled={advisorBusy || !advisorPrompt.trim()}>
+                  {advisorBusy ? "Thinking..." : "Ask Gemini"}
+                </button>
+                <button
+                  className="button button--ghost"
+                  onClick={() => setAdvisorPrompt("Summarize my current position, risk score, and bonus opportunity.")}
+                  type="button"
+                >
+                  Use position prompt
+                </button>
+              </div>
+              {advisorAnswer ? (
+                <div className="advisor-answer">
+                  <strong>Advisor response</strong>
+                  <p>{advisorAnswer}</p>
+                </div>
+              ) : (
+                <div className="event-empty">
+                  <strong>AI advisor ready</strong>
+                  <p>Add `GEMINI_API_KEY` in Vercel, then ask for risk summaries, demo explanations, or strategy notes.</p>
+                </div>
+              )}
+            </article>
+
+            <article className="panel">
+              <div className="panel__header">
+                <p className="eyebrow">Advisor context</p>
+                <h2>Live inputs</h2>
+              </div>
+              <div className="info-stack">
+                <div><span>Risk label</span><strong>{riskLabel}</strong></div>
+                <div><span>Risk score</span><strong>{position.risk_score}/100</strong></div>
+                <div><span>Projected bonus</span><strong>{formatAmount(projectedBonusValue)}</strong></div>
+                <div><span>Pool share</span><strong>{poolShare.toFixed(2)}%</strong></div>
               </div>
             </article>
           </section>

@@ -12,8 +12,11 @@ Use this page as the final review checklist before submitting Nebula Pool.
 ## Live Demo
 
 - Demo URL: <https://amitabhdey-byte.github.io/dapp-2/>
-- Mobile screenshot: `docs/mobile-view.png`
+- Desktop screenshots: `docs/screenshots/desktop-hero.png`, `docs/screenshots/manage-position.png`, `docs/screenshots/overview.png`
+- Mobile screenshots: `docs/screenshots/mobile-hero.png`, `docs/screenshots/mobile-overview.png`
+- CI/CD screenshot: `docs/screenshots/github-actions.png`
 - Demo video: `TBD_VIDEO_LINK`
+- Vercel env includes `GEMINI_API_KEY` for the AI advisor route
 
 ## Contracts
 
@@ -54,3 +57,4 @@ Expected frontend test summary:
 - Error/loading states: transaction buttons disable during invalid or busy states
 - Mobile responsiveness: CSS breakpoints cover tablet and phone layouts
 - CI/CD: GitHub Actions validates and deploys the app
+- AI advisor: `/api/gemini` provides server-side Gemini strategy summaries

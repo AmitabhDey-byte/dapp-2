@@ -32,6 +32,7 @@ body {
 
 button,
 input,
+textarea,
 a {
   font: inherit;
 }
@@ -308,12 +309,19 @@ a {
   margin-bottom: 1rem;
 }
 
-.field input {
+.field input,
+.field textarea {
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   color: var(--ink);
   padding: 0.95rem 1rem;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.55;
 }
 
 .preview,
@@ -463,6 +471,54 @@ a {
   font-size: 0.85rem;
 }
 
+.meter {
+  height: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 1rem;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--teal), var(--accent));
+  transition: width 220ms ease;
+}
+
+.mini-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.mini-metrics div,
+.advisor-answer {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.95rem;
+}
+
+.mini-metrics span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.advisor-answer {
+  margin-top: 1rem;
+}
+
+.advisor-answer p {
+  margin: 0.7rem 0 0;
+  white-space: pre-wrap;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .event-item__top {
   display: flex;
   justify-content: space-between;
@@ -544,5 +600,9 @@ a {
   .event-item__top {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .mini-metrics {
+    grid-template-columns: 1fr;
   }
 }
