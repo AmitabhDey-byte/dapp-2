@@ -262,8 +262,13 @@ a {
 }
 
 .page-grid--activity,
-.page-grid--guide {
+.page-grid--guide,
+.page-grid--advisor {
   grid-template-columns: 1.35fr 0.65fr;
+}
+
+.page-grid--advisor {
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.45fr);
 }
 
 .panel--wide {
@@ -510,6 +515,9 @@ a {
 
 .advisor-answer {
   margin-top: 1rem;
+  min-height: 260px;
+  max-height: 520px;
+  overflow: auto;
 }
 
 .advisor-answer p {
@@ -517,6 +525,17 @@ a {
   white-space: pre-wrap;
   color: var(--muted);
   line-height: 1.7;
+  font-size: 1rem;
+}
+
+.advisor-answer--error {
+  border-color: rgba(255, 143, 143, 0.35);
+  background: rgba(255, 143, 143, 0.08);
+}
+
+.advisor-answer--error strong,
+.advisor-answer--error p {
+  color: var(--danger);
 }
 
 .event-item__top {
@@ -544,7 +563,8 @@ a {
   .grid,
   .page-grid,
   .page-grid--activity,
-  .page-grid--guide {
+  .page-grid--guide,
+  .page-grid--advisor {
     grid-template-columns: 1fr;
   }
 
@@ -604,5 +624,10 @@ a {
 
   .mini-metrics {
     grid-template-columns: 1fr;
+  }
+
+  .advisor-answer {
+    min-height: 220px;
+    max-height: 420px;
   }
 }

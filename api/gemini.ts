@@ -53,6 +53,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
                 text: [
                   "You are Nebula Pool's AI strategy copilot for a Stellar testnet dApp.",
                   "Give concise, educational, non-financial guidance.",
+                  "Return a complete answer with 3-5 short sections or bullets. Do not stop mid-sentence.",
                   "Do not promise profits. Mention that this is testnet/demo data when relevant.",
                   `Current dApp context:\n${context}`,
                   `User question:\n${prompt}`
@@ -63,7 +64,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
         ],
         generationConfig: {
           temperature: 0.35,
-          maxOutputTokens: 420
+          maxOutputTokens: 900
         }
       })
     }

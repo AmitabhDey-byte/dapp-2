@@ -41,6 +41,7 @@ export default function App() {
   const [projectedBonus, setProjectedBonus] = useState(0);
   const [advisorPrompt, setAdvisorPrompt] = useState("How should I evaluate this pool position?");
   const [advisorAnswer, setAdvisorAnswer] = useState("");
+  const [advisorError, setAdvisorError] = useState("");
   const [advisorBusy, setAdvisorBusy] = useState(false);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("Waiting for wallet connection");
@@ -215,6 +216,7 @@ export default function App() {
   async function handleAskAdvisor() {
     try {
       setAdvisorBusy(true);
+      setAdvisorError("");
       setError("");
       const response = await fetch("/api/gemini", {
         method: "POST",
@@ -242,7 +244,7 @@ export default function App() {
 
       setAdvisorAnswer(data.answer ?? "No advisor response returned.");
     } catch (caughtError) {
-      setError(normalizeError(caughtError));
+      setAdvisorError(normalizeError(caughtError));
     } finally {
       setAdvisorBusy(false);
     }
@@ -502,7 +504,7 @@ export default function App() {
         ) : null}
 
         {activePage === "advisor" ? (
-          <section className="page-grid page-grid--guide">
+          <section className="page-grid page-grid--advisor">
             <article className="panel panel--wide">
               <div className="panel__header">
                 <p className="eyebrow">Gemini strategy copilot</p>
@@ -529,10 +531,15 @@ export default function App() {
                   <strong>Advisor response</strong>
                   <p>{advisorAnswer}</p>
                 </div>
+              ) : advisorError ? (
+                <div className="advisor-answer advisor-answer--error">
+                  <strong>Advisor error</strong>
+                  <p>{advisorError}</p>
+                </div>
               ) : (
                 <div className="event-empty">
                   <strong>AI advisor ready</strong>
-                  <p>Add `GEMINI_API_KEY` in Vercel, then ask for risk summaries, demo explanations, or strategy notes.</p>
+                  <p>Add `GEMINI_API_KEY` in `.env` for localhost and in Vercel for production, then ask for complete risk summaries, demo explanations, or strategy notes.</p>
                 </div>
               )}
             </article>
