@@ -15,6 +15,21 @@ The project is designed as a full-stack Web3 submission: not just a contract dem
 - Vercel deployment: [https://dapp-2-pearl.vercel.app/](https://dapp-2-pearl.vercel.app/)
 - Demo video: [Google Drive walkthrough](https://drive.google.com/file/d/1pJuuivnpNuMHSTpO_oAM7yRZZfNzAVt8/view?usp=sharing)
 
+## Deployment Evidence
+
+Network: Stellar testnet
+
+| Item | Value |
+| --- | --- |
+| Deployer public key | `GANF26XIFDKZNLRPRWTLZOIJZXNSF6GCDLSGJFHQDU3ATAS3VHXBAFCN` |
+| Oracle contract ID | `CBCV6ZC2XNLPPL2KIO5TQ7Z4BJ4MYCFVXIFG4O5ZZ56JEPHTHUC6FHJB` |
+| Pool contract ID | `CDYHTLXLYQED6VFIYNLMNWVIUTAH5QSPKNRZTVUZ6QWBOJRGSC3OMHT7` |
+| Oracle deployment transaction | `36b419deb136149bf555ed8e35cc30d1a17993efe64afaff98977024d57ed701` |
+| Oracle init transaction | `8c27cc5ae3ad4f99f7973eacdd12905f03c4fa2be39b8a634201b7ff4cb81e04` |
+| Pool deployment transaction | `d4e86fc4c54fdeaa5bcc5322fb0c5873dba5baa288e61b0a22ff957193a335da` |
+| Pool init transaction | `8d81534305c935b90d5bd0516142e241f240f3a26c74856036aab188f812def7` |
+| Example deposit interaction transaction | `c2a7078981cb791961d9c2b4d83c92e988fd6b39102ca1d27ce2046fc00fa527` |
+
 ## Preview
 
 ### Desktop Dashboard
@@ -122,20 +137,6 @@ Located at [`contracts/liquidity-pool`](contracts/liquidity-pool).
 - Tracks total deposits and participant count
 - Supports deposit, withdraw, refresh, position, and stats methods
 - Emits deposit, withdraw, and refresh events
-
-## Deployment Evidence
-
-Network: Stellar testnet
-
-| Item | Value |
-| --- | --- |
-| Oracle contract | `CBCV6ZC2XNLPPL2KIO5TQ7Z4BJ4MYCFVXIFG4O5ZZ56JEPHTHUC6FHJB` |
-| Pool contract | `CDYHTLXLYQED6VFIYNLMNWVIUTAH5QSPKNRZTVUZ6QWBOJRGSC3OMHT7` |
-| Oracle deploy tx | `36b419deb136149bf555ed8e35cc30d1a17993efe64afaff98977024d57ed701` |
-| Oracle init tx | `8c27cc5ae3ad4f99f7973eacdd12905f03c4fa2be39b8a634201b7ff4cb81e04` |
-| Pool deploy tx | `d4e86fc4c54fdeaa5bcc5322fb0c5873dba5baa288e61b0a22ff957193a335da` |
-| Pool init tx | `8d81534305c935b90d5bd0516142e241f240f3a26c74856036aab188f812def7` |
-| Example deposit tx | `c2a7078981cb791961d9c2b4d83c92e988fd6b39102ca1d27ce2046fc00fa527` |
 
 ## Local Setup
 
@@ -266,5 +267,9 @@ The Vite base path defaults to `/` for Vercel. GitHub Pages uses `VITE_BASE_PATH
 Use this short pitch for a 1-2 minute walkthrough:
 
 > Nebula Pool is a Stellar testnet liquidity dashboard. A user connects Freighter, deposits into a Soroban pool, and the pool calls a separate strategy oracle contract to calculate reward bonuses and risk scores. The frontend reads live contract state and recent events from Stellar RPC. The app also includes responsive analytics pages, deployment evidence, tests, CI/CD, and an optional Gemini strategy copilot powered by a secure serverless route.
+
+
+
+
 
 
