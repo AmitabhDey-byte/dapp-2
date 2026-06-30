@@ -135,4 +135,20 @@ mod tests {
         assert_eq!(client.projected_bonus(&6_000, &30), 5917);
         assert_eq!(client.risk_score(&12_000), 82);
     }
+
+    #[test]
+    fn admin_can_add_high_value_tier() {
+        let env = Env::default();
+        let contract_id = env.register(StrategyOracle, ());
+        let client = StrategyOracleClient::new(&env, &contract_id);
+        let admin = Address::generate(&env);
+
+        client.init(&admin, &String::from_str(&env, "Nebula tiers"));
+        env.mock_all_auths();
+        client.set_tier(&15_000, &2_000);
+
+        assert_eq!(client.projected_bonus(&20_000, &30), 32876);
+        assert_eq!(client.risk_score(&20_000), 82);
+        assert!(client.tiers().contains_key(15_000));
+    }
 }

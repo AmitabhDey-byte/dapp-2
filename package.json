@@ -8,9 +8,11 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "frontend:test": "node --test src/lib/format.test.ts",
     "contracts:test": "cargo test --manifest-path contracts/Cargo.toml",
     "contracts:build": "cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --release",
-    "check": "npm run lint && npm run build && npm run contracts:test"
+    "test": "npm run frontend:test && npm run contracts:test",
+    "check": "npm run lint && npm run build && npm run frontend:test && npm run contracts:test"
   },
   "dependencies": {
     "@stellar/freighter-api": "^6.0.1",
@@ -32,4 +34,3 @@
     "vite": "^7.1.12"
   }
 }
-
