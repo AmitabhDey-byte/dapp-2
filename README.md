@@ -108,6 +108,7 @@ npm run contracts:build
 
 - Public GitHub repository: `https://github.com/AmitabhDey-byte/dapp-2`
 - Live demo link: `https://amitabhdey-byte.github.io/dapp-2/`
+- Submission evidence tracker: [`docs/submission-evidence.md`](docs/submission-evidence.md)
 - Mobile responsive view screenshot: add after local or deployed capture
 - CI/CD badge: included at the top of this README
 - Contract addresses and transaction hashes:
