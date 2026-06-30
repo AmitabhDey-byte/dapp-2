@@ -2,6 +2,7 @@ name: Deploy Pages
 
 env:
   VITE_STELLAR_NETWORK: TESTNET
+  VITE_BASE_PATH: /dapp-2/
   VITE_STELLAR_RPC_URL: https://soroban-testnet.stellar.org
   VITE_STELLAR_HORIZON_URL: https://horizon-testnet.stellar.org
   VITE_STELLAR_NETWORK_PASSPHRASE: Test SDF Network ; September 2015
