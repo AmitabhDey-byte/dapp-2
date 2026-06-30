@@ -40,7 +40,21 @@ export default function App() {
   const [status, setStatus] = useState("Waiting for wallet connection");
   const [error, setError] = useState("");
 
-  const previewEnabled = hasContractConfig && Number(depositAmount) > 0 && Number(lockDays) > 0;
+  const parsedDepositAmount = Number(depositAmount);
+  const parsedLockDays = Number(lockDays);
+  const parsedWithdrawAmount = Number(withdrawAmount);
+  const hasValidDeposit = Number.isFinite(parsedDepositAmount) && parsedDepositAmount > 0;
+  const hasValidLockDays = Number.isInteger(parsedLockDays) && parsedLockDays > 0;
+  const hasValidWithdraw = Number.isFinite(parsedWithdrawAmount) && parsedWithdrawAmount > 0;
+  const canSubmitDeposit = wallet.connected && hasContractConfig && hasValidDeposit && hasValidLockDays && !busy;
+  const canSubmitWithdraw = wallet.connected && hasContractConfig && hasValidWithdraw && !busy;
+  const canRefreshRewards = wallet.connected && hasContractConfig && position.deposited > 0 && !busy;
+  const formHint = !hasContractConfig
+    ? "Deploy contracts and add their IDs before sending transactions."
+    : !wallet.connected
+      ? "Connect Freighter to manage your pool position."
+      : "Enter positive values to submit pool actions.";
+  const previewEnabled = hasContractConfig && hasValidDeposit && hasValidLockDays;
   const projectedBonusValue = previewEnabled ? projectedBonus : 0;
 
   async function refreshData(address?: string) {
@@ -119,10 +133,15 @@ export default function App() {
   }
 
   async function handleDeposit() {
+    if (!canSubmitDeposit) {
+      setError("Enter a positive deposit amount and lock duration before depositing.");
+      return;
+    }
+
     try {
       setBusy(true);
       setError("");
-      const txHash = await submitDeposit(wallet.address, Number(depositAmount), Number(lockDays));
+      const txHash = await submitDeposit(wallet.address, parsedDepositAmount, parsedLockDays);
       setStatus(`Deposit submitted: ${txHash}`);
       await refreshData(wallet.address);
     } catch (caughtError) {
@@ -133,10 +152,15 @@ export default function App() {
   }
 
   async function handleWithdraw() {
+    if (!canSubmitWithdraw) {
+      setError("Enter a positive withdraw amount before withdrawing.");
+      return;
+    }
+
     try {
       setBusy(true);
       setError("");
-      const txHash = await submitWithdraw(wallet.address, Number(withdrawAmount));
+      const txHash = await submitWithdraw(wallet.address, parsedWithdrawAmount);
       setStatus(`Withdraw submitted: ${txHash}`);
       await refreshData(wallet.address);
     } catch (caughtError) {
@@ -147,6 +171,11 @@ export default function App() {
   }
 
   async function handleRefresh() {
+    if (!canRefreshRewards) {
+      setError("Deposit into the pool before refreshing rewards.");
+      return;
+    }
+
     try {
       setBusy(true);
       setError("");
@@ -217,8 +246,9 @@ export default function App() {
             <span>Projected bonus</span>
             <strong>{formatAmount(projectedBonusValue)} units</strong>
           </div>
-          <button className="button button--primary" onClick={handleDeposit} disabled={!wallet.connected || busy || !hasContractConfig}>
-            Deposit to pool
+          <p className="helper-text">{formHint}</p>
+          <button className="button button--primary" onClick={handleDeposit} disabled={!canSubmitDeposit}>
+            {busy ? "Submitting..." : "Deposit to pool"}
           </button>
 
           <label className="field">
@@ -226,10 +256,10 @@ export default function App() {
             <input value={withdrawAmount} onChange={(event) => setWithdrawAmount(event.target.value)} inputMode="numeric" />
           </label>
           <div className="button-row">
-            <button className="button button--secondary" onClick={handleWithdraw} disabled={!wallet.connected || busy || !hasContractConfig}>
+            <button className="button button--secondary" onClick={handleWithdraw} disabled={!canSubmitWithdraw}>
               Withdraw
             </button>
-            <button className="button button--ghost" onClick={handleRefresh} disabled={!wallet.connected || busy || !hasContractConfig}>
+            <button className="button button--ghost" onClick={handleRefresh} disabled={!canRefreshRewards}>
               Refresh rewards
             </button>
           </div>
@@ -262,7 +292,7 @@ export default function App() {
             <span>Last update</span>
             <strong>{formatRelativeDate(position.updated_at)}</strong>
           </div>
-          <div className="status-block">
+          <div className="status-block" aria-live="polite">
             <span>Status</span>
             <strong>{status}</strong>
           </div>

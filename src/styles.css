@@ -242,9 +242,16 @@ a {
 }
 
 .warning-text,
-.error-text {
+.error-text,
+.helper-text {
   margin: 1rem 0 0;
   line-height: 1.6;
+}
+
+.helper-text {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0 0 1rem;
 }
 
 .warning-text {
