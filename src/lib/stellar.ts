@@ -168,12 +168,15 @@ export async function readEvents() {
     return [];
   }
 
+  const server = await rpcServer();
+  const latestLedger = await server.getLatestLedger();
+  const startLedger = Math.max(1, latestLedger.sequence - 10_000);
   const body = {
     jsonrpc: "2.0",
     id: "nebula-events",
     method: "getEvents",
     params: {
-      startLedger: 1,
+      startLedger,
       filters: [
         {
           type: "contract",
@@ -192,6 +195,11 @@ export async function readEvents() {
     body: JSON.stringify(body)
   });
   const data = await response.json();
+
+  if (data.error) {
+    throw new Error(data.error.message ?? "Unable to load contract events");
+  }
+
   const records = data.result?.events ?? [];
 
   return records

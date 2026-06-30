@@ -412,8 +412,8 @@ export default function App() {
                   ))
                 ) : (
                   <div className="event-empty">
-                    <strong>No events yet</strong>
-                    <p>Once the pool and oracle are deployed, this panel streams contract activity directly from RPC.</p>
+                    <strong>No recent events loaded</strong>
+                    <p>Deposit, withdraw, or refresh rewards to create fresh pool activity in the Stellar RPC feed.</p>
                   </div>
                 )}
               </div>
