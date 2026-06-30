@@ -27,7 +27,29 @@ async function toNative(value: ScVal | undefined) {
     return null;
   }
 
-  return StellarSdk.scValToNative(value);
+  return normalizeNative(StellarSdk.scValToNative(value));
+}
+
+function normalizeNative<T>(value: T): T {
+  if (typeof value === "bigint") {
+    return Number(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(normalizeNative) as T;
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, normalizeNative(entry)])
+    ) as T;
+  }
+
+  return value;
+}
+
+function stringifyEventPart(value: unknown) {
+  return JSON.stringify(value, (_key, entry) => (typeof entry === "bigint" ? entry.toString() : entry));
 }
 
 async function fromNumber(value: number) {
@@ -186,8 +208,8 @@ export async function readEvents() {
           id: event.id,
           contractId: event.contractId,
           ledger: event.ledger,
-          topic: JSON.stringify(event.topic),
-          value: JSON.stringify(event.value),
+          topic: stringifyEventPart(event.topic),
+          value: stringifyEventPart(event.value),
           timestamp: event.timestamp
         }) satisfies PoolEvent
     )

@@ -4,15 +4,17 @@ export function formatAmount(value: number | bigint, digits = 0) {
   }).format(Number(value));
 }
 
-export function formatRelativeDate(timestamp: number) {
+export function formatRelativeDate(timestamp: number | bigint) {
   if (!timestamp) {
     return "Not updated yet";
   }
 
+  const timestampMs = Number(timestamp) * 1000;
+
   return new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
     timeStyle: "short"
-  }).format(new Date(timestamp * 1000));
+  }).format(new Date(timestampMs));
 }
 
 export function truncateAddress(value: string) {
@@ -34,4 +36,3 @@ export function normalizeError(error: unknown) {
 
   return "Something went wrong";
 }
-

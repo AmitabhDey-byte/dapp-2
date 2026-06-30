@@ -7,7 +7,7 @@ Nebula Pool is a production-minded Stellar dapp built around advanced Soroban co
 
 ## Live demo
 
-Planned Pages URL after push and Pages enablement:
+GitHub Pages deployment:
 
 [https://amitabhdey-byte.github.io/dapp-2/](https://amitabhdey-byte.github.io/dapp-2/)
 
@@ -112,12 +112,15 @@ npm run contracts:build
 - Mobile responsive view screenshot: add after local or deployed capture
 - CI/CD badge: included at the top of this README
 - Contract addresses and transaction hashes:
-  - Oracle contract ID: `TBD_AFTER_DEPLOY`
-  - Oracle deploy transaction: `TBD_AFTER_DEPLOY`
-  - Pool contract ID: `TBD_AFTER_DEPLOY`
-  - Pool deploy transaction: `TBD_AFTER_DEPLOY`
+  - Oracle contract ID: `CBCV6ZC2XNLPPL2KIO5TQ7Z4BJ4MYCFVXIFG4O5ZZ56JEPHTHUC6FHJB`
+  - Oracle deploy transaction: `36b419deb136149bf555ed8e35cc30d1a17993efe64afaff98977024d57ed701`
+  - Oracle init transaction: `8c27cc5ae3ad4f99f7973eacdd12905f03c4fa2be39b8a634201b7ff4cb81e04`
+  - Pool contract ID: `CDYHTLXLYQED6VFIYNLMNWVIUTAH5QSPKNRZTVUZ6QWBOJRGSC3OMHT7`
+  - Pool deploy transaction: `d4e86fc4c54fdeaa5bcc5322fb0c5873dba5baa288e61b0a22ff957193a335da`
+  - Pool init transaction: `8d81534305c935b90d5bd0516142e241f240f3a26c74856036aab188f812def7`
+  - Example deposit interaction transaction: `c2a7078981cb791961d9c2b4d83c92e988fd6b39102ca1d27ce2046fc00fa527`
 - Token or pool address:
-  - Pool address: `TBD_AFTER_DEPLOY`
+  - Pool address: `CDYHTLXLYQED6VFIYNLMNWVIUTAH5QSPKNRZTVUZ6QWBOJRGSC3OMHT7`
 
 ## Mobile responsive proof
 

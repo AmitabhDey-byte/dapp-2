@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { formatAmount, normalizeError, truncateAddress } from "./format.ts";
+import { formatAmount, formatRelativeDate, normalizeError, truncateAddress } from "./format.ts";
 
 describe("format helpers", () => {
   it("formats large pool amounts with separators", () => {
@@ -13,5 +13,9 @@ describe("format helpers", () => {
 
   it("normalizes unknown failures into a safe message", () => {
     assert.equal(normalizeError({ reason: "rpc timeout" }), "Something went wrong");
+  });
+
+  it("formats Soroban bigint timestamps without crashing", () => {
+    assert.match(formatRelativeDate(1782842530n), /2026/);
   });
 });

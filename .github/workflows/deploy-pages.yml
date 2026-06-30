@@ -1,5 +1,14 @@
 name: Deploy Pages
 
+env:
+  VITE_STELLAR_NETWORK: TESTNET
+  VITE_STELLAR_RPC_URL: https://soroban-testnet.stellar.org
+  VITE_STELLAR_HORIZON_URL: https://horizon-testnet.stellar.org
+  VITE_STELLAR_NETWORK_PASSPHRASE: Test SDF Network ; September 2015
+  VITE_POOL_LABEL: Nebula Pool
+  VITE_POOL_CONTRACT_ID: CDYHTLXLYQED6VFIYNLMNWVIUTAH5QSPKNRZTVUZ6QWBOJRGSC3OMHT7
+  VITE_ORACLE_CONTRACT_ID: CBCV6ZC2XNLPPL2KIO5TQ7Z4BJ4MYCFVXIFG4O5ZZ56JEPHTHUC6FHJB
+
 on:
   push:
     branches: ["main"]
@@ -50,4 +59,3 @@ jobs:
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
