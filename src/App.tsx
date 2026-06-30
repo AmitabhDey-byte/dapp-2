@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { config, hasContractConfig } from "./lib/config";
 import { formatAmount, formatRelativeDate, normalizeError, truncateAddress } from "./lib/format";
-import { canAccessWallet, connectWallet, getWalletAddress } from "./lib/freighter";
+import { canAccessWallet, connectWallet } from "./lib/freighter";
 import {
   previewProjectedBonus,
   readEvents,
@@ -102,15 +102,11 @@ export default function App() {
     void (async () => {
       try {
         const allowed = await canAccessWallet();
+        await refreshData();
 
-        if (!allowed) {
-          await refreshData();
-          return;
+        if (allowed) {
+          setStatus("Freighter permission found. Click Connect Freighter to load your wallet position.");
         }
-
-        const address = await getWalletAddress();
-        setWallet({ address, connected: true });
-        await refreshData(address);
       } catch (caughtError) {
         setError(normalizeError(caughtError));
       }
@@ -154,6 +150,13 @@ export default function App() {
     } finally {
       setBusy(false);
     }
+  }
+
+  function handleForgetWallet() {
+    setWallet({ address: "", connected: false });
+    setPosition(initialPosition);
+    setStatus("Wallet disconnected in this session. Revoke site access in Freighter to fully clear permission.");
+    setError("");
   }
 
   async function handleDeposit() {
@@ -291,6 +294,11 @@ export default function App() {
             <button className="button button--primary" onClick={handleConnect} disabled={busy}>
               {wallet.connected ? "Freighter connected" : "Connect Freighter"}
             </button>
+            {wallet.connected ? (
+              <button className="button button--ghost" onClick={handleForgetWallet} type="button">
+                Forget wallet
+              </button>
+            ) : null}
             <button className="button button--ghost" onClick={() => setActivePage("manage")} type="button">
               Start managing
             </button>
