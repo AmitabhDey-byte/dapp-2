@@ -7,6 +7,8 @@ Nebula Pool is a production-style Stellar testnet dApp that combines Soroban sma
 
 The submission is intentionally structured for review: deployed contract IDs, transaction hashes, screenshots, live links, test commands, and the requirement checklist are all visible in this README.
 
+Resubmission note: the README now places deployment evidence and the example contract interaction transaction before screenshots so reviewers can validate the deployed Stellar testnet app immediately.
+
 ## Reviewer Quick Validation
 
 | Requirement | Evidence |
